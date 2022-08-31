@@ -3,6 +3,7 @@
   //如果 当前的上下文有define函数，并且AMD  说明处于AMD 环境下
   if (typeof define === "function" && define.amd) {
     define(["./module1.js"], factory)
+    console.log('index -> amd')
   } else if (typeof exports === "object") {
     //commonjs
     let module1 = require("./module1.js")
