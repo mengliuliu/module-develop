@@ -68,17 +68,63 @@ module1.func1()
 执行结果如下
 ![结果](./IIFE//images/result.jpeg)
 
-### 分析
+### IIFE分析
 
 上面代码中定义了两个模块，分别为module1、module2。module1依赖module2，并且每个模块的导出对象都挂载在window上。如果module1依赖module2，那么module2必须在module1之前引入。都说了这么多了，相信各位大佬们应该知道IIFE有哪些弊端了吧。
 
-### 弊端
+### IIFE弊端
 
 - 模块的引入必须按照特定的先后顺序，导致模块不好复用
 - 模块的名字容易命名冲突，导致意想不到的结果
 - 请求次数过多，有多少个模块就要发送多少次请求（这个问题在出现了打包工具才得已解决）
 
 ## CommonJS
+
+文件结构如下
+
+```text
+├── CommonJS
+│   ├── images
+│   │   └── result.jpeg
+│   ├── index.js
+│   └── js
+│       └── modules
+│           ├── module1.js
+│           └── module2.js
+```
+
+代码内容如下
+
+```javascript
+// index.js
+const module1 = require("./js/modules/module1")
+module1.func1()
+
+
+// module1.js
+const module2 = require("./module2")
+
+const func1 = () => {
+  console.log("module2.data2", module2.data2)
+  console.log("module1中的func1")
+}
+
+module.exports = {
+  func1,
+}
+
+
+
+// module2.js
+exports.data2 = "我是module2中的数据"
+```
+
+执行结果如下
+![结果](./CommonJS/images/result.jpeg)
+
+### CommonJS分析
+
+### CommonJS弊端
 
 ## RequireJS & AMD（Asynchronous Module Definition）
 

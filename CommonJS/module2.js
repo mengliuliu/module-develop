@@ -1,1 +1,0 @@
-exports.data2 = '我是module2中的数据'

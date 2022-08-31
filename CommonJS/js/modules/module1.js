@@ -1,3 +1,4 @@
+// module1.js
 const module2 = require("./module2")
 
 const func1 = () => {
@@ -6,5 +7,5 @@ const func1 = () => {
 }
 
 module.exports = {
-    func1,
+  func1,
 }
