@@ -10,7 +10,10 @@
 
 ```text
 ├── IIFE
+│   ├── images
+│   │   └── result.jpeg
 │   ├── index.html
+│   ├── index.js
 │   └── js
 │       └── modules
 │           ├── module1.js
@@ -31,11 +34,14 @@
   <body>
     <script src="./js/modules/module2.js"></script>
     <script src="./js/modules/module1.js"></script>
-    <script>
-      module1.func1()
+    <script src="./index.js">
     </script>
   </body>
 </html>
+
+
+// index.js
+module1.func1()
 
 
 // module1.js
