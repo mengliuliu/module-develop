@@ -72,7 +72,7 @@ module1.func1()
 
 上面代码中定义了两个模块，分别为module1、module2。module1依赖module2，并且每个模块的导出对象都挂载在window上。如果module1依赖module2，那么module2必须在module1之前引入。都说了这么多了，相信各位大佬们应该知道IIFE有哪些弊端了吧。
 
-### IIFE弊端
+### IIFE总结
 
 - 模块的引入必须按照特定的先后顺序，导致模块不好复用
 - 模块的名字容易命名冲突，导致意想不到的结果
@@ -124,7 +124,22 @@ exports.data2 = "我是module2中的数据"
 
 ### CommonJS分析
 
-### CommonJS弊端
+1. 导出
+
+    CommonJS模块通过module.exports或exports导出模块。module是个对象，代表当前模块，module对象有个属性叫exports，并且模块内有个变量叫exports指向modules.exports。换句话说就是模块内部有一条类似于这样的代码var exports = module.exports。
+
+2. 导入
+
+    CommonJS模块通过require导入模块。注意这一切都集成在node中了，只要你使用的require加载模块，被加载的文件就被默认为CommonJS模块。其实require一个模块主要做了两件事，一是执行这个文件，二是得到这个文件的导出对象。
+
+3. 注意
+
+    CommonJS是运行时同步加载，这里说明一下。由于js是解释型语言，所以代码需要先解释在运行，对于解释你暂且把它理解成编译吧。例如var n = 10，就是执行到这行代码，js引擎线程会告诉计算机这行代码需要在计算机内部开辟一部分内存啥啥的，然后再去运行，比如给刚刚声明的变量赋值（往刚刚开辟的内存区域存放一个值）。
+
+### CommonJS总结
+
+- CommonJS解决了命名冲突，模块不好复用等问题
+- 运行时同步加载不适合浏览器环境。由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快
 
 ## RequireJS & AMD（Asynchronous Module Definition）
 
@@ -133,3 +148,6 @@ exports.data2 = "我是module2中的数据"
 ## UMD
 
 ## ES Module
+
+## 参考资料
+- https://juejin.cn/post/6844903744518389768#heading-7
