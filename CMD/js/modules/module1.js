@@ -1,3 +1,4 @@
+// module1.js
 define(function (require, exports, module) {
   const module2 = require('./module2')
   const func1 = () => {
