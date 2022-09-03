@@ -143,6 +143,86 @@ exports.data2 = "我是module2中的数据"
 
 ## RequireJS & AMD（Asynchronous Module Definition）
 
+文件结构如下
+
+```text
+├── AMD
+│   ├── images
+│   │   └── result.jpeg
+│   ├── index.html
+│   ├── index.js
+│   └── js
+│       ├── lib
+│       │   └── require.js
+│       └── modules
+│           ├── module1.js
+│           └── module2.js
+```
+
+代码内容如下
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script data-main="./index.js" src="./js/lib/require.js"></script>
+</body>
+</html>
+
+
+// index.js
+;(function () {
+  require.config({
+    // baseUrl: "js/", //基本路径 出发点在根目录下
+    // paths: { //  映射: 模块标识名: 路径
+      
+    // },
+  })
+  require(["./js/modules/module1.js"], function (module1) {
+    module1.func1()
+  })
+})()
+
+
+
+// module1.js
+define(["./module2.js"], function (module2) {
+  const func1 = () => {
+    console.log("module2.data2", module2.data2)
+    console.log("module1中的func1")
+  }
+  return { func1 } // 暴露模块
+})
+
+
+// module2.js
+define(function () {
+  const data2 = "我是module2中的数据"
+  return { data2 }
+})
+```
+
+执行结果如下
+![结果](./AMD/images/result.jpeg)
+
+### AMD分析
+
+1. 导出
+  AMD模块通过define函数导出模块，函数的参数是个回掉函数，回掉函数的返回值是需要导出的内容。define函数当你引入require.js文件时就已经全局定义了。
+
+2. 导入
+  AMD模块通过require函数导入模块，函数的第一个参数是个数组，表示需要导入模块的路径，当然也可以在入口文件中定义映射关系。第二个参数是回掉函数，回掉函数的参数代表导入的模块，在回掉函数中就可以使用导入的模块了。
+
+### AMD总结
+
+由于CommonJS模块是运行时同步加载只适合node环境，AMD是运行时异步加载，正好适合浏览器环境。
+
 ## SeaJS & CMD（Common Module Definition）
 
 ## UMD
@@ -150,4 +230,5 @@ exports.data2 = "我是module2中的数据"
 ## ES Module
 
 ## 参考资料
-- https://juejin.cn/post/6844903744518389768#heading-7
+
+- <https://juejin.cn/post/6844903744518389768#heading-7>
