@@ -1,3 +1,4 @@
+// module1.js
 define(["./module2.js"], function (module2) {
   const func1 = () => {
     console.log("module2.data2", module2.data2)
