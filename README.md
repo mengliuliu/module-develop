@@ -4,6 +4,8 @@
 
 回顾我的代码岁月，总是import xxx from 'xxx'或者const xxx = require('xxx')，却不知为什么要这么写。最近抽空把前端模块化的发展整理一下。接下来，让我们一起走进前端的历史，看看模块化的发展。
 
+github仓库地址：<https://github.com/mengliuliu/module_develop>
+
 ## IIFE（Immediately Invoked Function Expression）
 
 文件结构如下
@@ -326,10 +328,89 @@ define(function (require, exports, module) {
 
 ### UMD总结
 
-UMD模块我只贴了一段代码，相信小伙伴们看一遍也明白了。心中是不是在想UMD模块，就这。哈哈哈，就是这样，通过判断语句，把AMD模块和CommonJS模块结合在一起，这样就既可以在浏览器环境运行，也可以在node环境运行
+UMD模块我只贴了一段代码，相信小伙伴们看一遍也明白了。心中是不是在想UMD模块，就这。哈哈哈，就是这样，通过判断语句，把AMD模块和CommonJS模块结合在一起，这样就既可以在浏览器环境运行，也可以在node环境运行。
 
-## ES Module
+## ES6Module
+
+文件结构如下
+
+```text
+├── ES6Module
+│   ├── images
+│   │   └── result.jpeg
+│   ├── index.html
+│   ├── index.js
+│   └── js
+│       └── modules
+│           ├── module1.js
+│           └── module2.js
+```
+
+代码内容如下
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="module" src="./index.js"></script>
+</body>
+</html>
+
+
+// index.js
+import { func1 } from "./js/modules/module1.js"
+func1()
+
+
+// module1.js
+import data2 from "./module2.js"
+const func1 = () => {
+  console.log("module2.data2", data2)
+  console.log("我是module1中的函数")
+}
+export { func1 }
+
+
+// module2.js
+const data2 = "我是module2中的数据"
+export default data2
+```
+
+执行结果如下
+![结果](./ES6Module/images/result.jpeg)
+
+### ES6Module分析
+
+1. 导出
+  ES6Module有两种导出方式，一种是默认导出（export default data2），一种是按需导出（export { func1 }）。
+  
+2. 导入
+  对于默认导出，我们用这样的语句导入模块（import data2 from "./module2.js"），对于按需导出，我们用这样的语句导入模块（import { func1 } from "./js/modules/module1.js"）。当然，一个模块可以同时使用两种导出方式，但是默认导出在一个模块内只能使用一次。
+
+3. 其它
+  对于导入，ES6Module还有两种方式，一种是import 'xxx'，只有import没有from。这种语句一般用于加载样式文件，因为这种语句只是执行模块内的代码。另一种是import ('xxx')，这种语句用于动态加载，就是常说的代码分割、路由懒加载啥的，感兴趣的小伙伴可以自行查找资料。你可以理解为当用到这个模块时才会发送请求加载这个模块，这样大大减轻了初始加载js文件过大的问题。
+
+### ES6Module总结
+
+1. ES6Module和CommonJS区别
+   - CommonJS模块输出的是一个值的复制，ES6Module输出的是值的引用
+   - CommonJS模块是运行时同步加载，ES6Module是编译时加载
+
+2. ES6Module注意事项
+   - 由于ES6Module是编译时加载，所以不能讲import语句放在需要运行的代码中，比如if分支、函数内等。因为分支结构内的代码是在运行时执行的，import语句是在代码编译或者说解释时执行的
+   - import语句是编译时加载，import函数是运行时异步加载。这里import 'xxx' from 'xxx'和import 'xxx'称为import语句；import('xxx')称为import函数
+
+3. 总结
+ES6Module是编译时加载，也就是说在编译时就已经加载了模块，得到了模块导出的内容。大家想一想，编译时，代码还没运行，那么我们得到的一定是值的引用。import函数是运行时异步加载，这使ES6Module既可以在node环境中运行，也可以在浏览器环境中运行，简直太棒了。
 
 ## 参考资料
 
-- <https://juejin.cn/post/6844903744518389768#heading-7>
+- <https://juejin.cn/post/6844903744518389768>
+- <https://juejin.cn/post/6938581764432461854>
+- ES6标准入门（第3版）阮一峰著
