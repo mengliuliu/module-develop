@@ -225,7 +225,108 @@ define(function () {
 
 ## SeaJS & CMD（Common Module Definition）
 
+文件结构如下
+
+```text
+├── CMD
+│   ├── images
+│   │   └── reqult.jpeg
+│   ├── index.html
+│   ├── index.js
+│   └── js
+│       ├── lib
+│       │   └── Sea.js
+│       └── modules
+│           ├── module1.js
+│           └── module2.js
+```
+
+代码内容如下
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="./js/lib/Sea.js"></script>
+    <script >
+        seajs.use('./index.js')
+    </script>
+</body>
+</html>
+
+
+// index.js
+define(function (require) {
+  var m1 = require('./js/modules/module1')
+  m1.func1()
+})
+
+
+
+// module1.js
+define(function (require, exports, module) {
+  const module2 = require('./module2')
+  const func1 = () => {
+    console.log("module2.data2", module2.data2)
+    console.log("module1中的func1")
+  }
+  exports.func1 = func1
+})
+
+
+
+// module2.js
+define(function (require, exports, module) {
+  const data2 = "我是module2中的数据"
+  exports.data2 = data2
+})
+```
+
+执行结果如下
+![结果](./CMD/images/reqult.jpeg)
+
+### CMD分析
+
+1. 导入、导出
+  AMD模块通过define函数定义模块，函数的参数是个回掉函数。回掉函数有三个参数，分别是require、exports、module。require参数是个函数，用于引入模块；exports参数是一个对象，表示需要导出的内容；module参数是一个对象，表示当前模块。
+
+### CMD总结
+
+看的出来CMD和AMD模块写法很相似，都是用于浏览器端。它两的主要区别是，AMD模块依赖前置，就是把当前的模块所依赖的模块都放在define函数的第一个参数中，这样一眼就可以看出当前模块依赖了哪些模块；CMD模块是就近依赖，把当前模块所依赖的模块放在函数中，什么时候需要就什么时候引入。具体喜欢那种模块，看个人喜好吧。
+
 ## UMD
+
+代码内容如下
+
+```javascript
+// UMD简单实现
+;((global, factory) => {
+  //如果 当前的上下文有define函数，并且AMD  说明处于AMD 环境下
+  if (typeof define === "function" && define.amd) {
+    define(["./module1.js"], factory)
+  } else if (typeof exports === "object") {
+    //commonjs
+    let module1 = require("./module1.js")
+    module.exports = factory(module1)
+  } else {
+    global.module1 = factory(global.moduleA) //直接挂载成 windows 全局变量
+  }
+})(this, (module1) => {
+  module1.func1()
+  //本模块的定义
+  return {}
+})
+```
+
+### UMD总结
+
+UMD模块我只贴了一段代码，相信小伙伴们看一遍也明白了。心中是不是在想UMD模块，就这。哈哈哈，就是这样，通过判断语句，把AMD模块和CommonJS模块结合在一起，这样就既可以在浏览器环境运行，也可以在node环境运行
 
 ## ES Module
 
