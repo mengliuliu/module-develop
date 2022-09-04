@@ -1,3 +1,4 @@
+// module1.js
 import data2 from "./module2.js"
 const func1 = () => {
   console.log("module2.data2", data2)

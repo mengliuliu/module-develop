@@ -1,4 +1,3 @@
-// module2.js文件
+// module2.js
 const data2 = "我是module2中的数据"
-
 export default data2

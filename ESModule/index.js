@@ -1,2 +1,3 @@
-import { func1 } from "./module1.js"
+// index.js
+import { func1 } from "./js/modules/module1.js"
 func1()
